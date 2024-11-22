@@ -1,5 +1,4 @@
-# Requirements for Python 3.10
-python_version == "3.10"
+
 
 aiohappyeyeballs==2.4.3
 aiohttp==3.11.2
