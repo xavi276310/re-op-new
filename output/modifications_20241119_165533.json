@@ -1,0 +1,11 @@
+{
+  "skills_to_add": {
+    "Python development": "3年开发经验"
+  },
+  "content_to_remove": [
+    "LANGUAGE SKILLS section"
+  ],
+  "content_to_modify": {
+    "Bachelor's degree in Psychology and Education Sciences": "Bachelor's degree in Computer Science or related field"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors"
+  },
+  "content_to_remove": [
+    "and I also have experience in restaurants in the field of cleaning cooking ingredients, washing dishes.",
+    "I used to be a tailor employee."
+  ],
+  "content_to_modify": {
+    "清理厨房食材": "在餐厅环境中负责清理和准备厨房食材，确保工作场所的整洁与高效，支持厨房团队流畅运作。"
+  }
+}

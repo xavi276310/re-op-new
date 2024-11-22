@@ -1,0 +1,15 @@
+streamlit
+openai<1.0.0
+PyPDF2
+Pillow
+pydantic
+termcolor
+reportlab
+markdown
+python-dotenv
+jinja2
+pdfkit
+
+[ocr]
+pytesseract
+pdf2image

@@ -1,0 +1,14 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Highlight any experience handling cash transactions or managing payments",
+    "Customer Service": "Emphasize your experience interacting with customers and handling their needs"
+  },
+  "content_to_remove": [
+    "read a book",
+    "I used to be a tailor employee"
+  ],
+  "content_to_modify": {
+    "cleaning kitchen ingredients": "Responsible for maintaining a clean and organized kitchen environment, including cleaning cooking ingredients and washing dishes to support efficient restaurant operations",
+    "washing dishes": "Maintained high standards of cleanliness by efficiently managing dishwashing operations and ensuring proper sanitation protocols"
+  }
+}

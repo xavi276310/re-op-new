@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors",
+    "Customer Service": "Customer Service"
+  },
+  "content_to_remove": [
+    "read a book",
+    "I used to be a tailor employee."
+  ],
+  "content_to_modify": {
+    "cleaning cooking ingredients, washing dishes": "Responsible for maintaining a clean and organized kitchen environment, including cleaning cooking ingredients and washing dishes to support efficient restaurant operations."
+  }
+}

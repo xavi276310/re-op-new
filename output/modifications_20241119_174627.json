@@ -1,0 +1,11 @@
+{
+  "skills_to_add": {
+    "Strong knowledge of Python development": "3年python经验"
+  },
+  "content_to_remove": [
+    "LANGUAGE SKILLS section"
+  ],
+  "content_to_modify": {
+    "Mariana Sandutiu Luminita": "Luminita Sandutiu"
+  }
+}

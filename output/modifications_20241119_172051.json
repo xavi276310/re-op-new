@@ -1,0 +1,11 @@
+{
+  "skills_to_add": {
+    "Python development": "3年python经验"
+  },
+  "content_to_remove": [
+    "Language skills and additional information unrelated to the job position"
+  ],
+  "content_to_modify": {
+    "Work and Organisational Psychology MA": "Master's degree in Computer Science or related field"
+  }
+}

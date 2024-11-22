@@ -1,0 +1,11 @@
+{
+  "skills_to_add": {
+    "Experience in Python development": "3年python经验"
+  },
+  "content_to_remove": [
+    "ABOUT ME section"
+  ],
+  "content_to_modify": {
+    "Leadership skills, including the ability to delegate, supervise and see tasks through from start to finish": "Experience leading technical projects and mentoring junior developers"
+  }
+}

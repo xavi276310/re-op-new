@@ -1,0 +1,30 @@
+Job Title: Senior Software Engineer
+
+Company Overview:
+We are a dynamic technology company seeking a talented Senior Software Engineer to join our team.
+
+Required Skills:
+- 5+ years experience in Python development
+- Strong knowledge of web frameworks (Django/Flask)
+- Experience with cloud platforms (AWS/GCP)
+- Proficient in Git and CI/CD practices
+- Excellent problem-solving abilities
+
+Preferred Qualifications:
+- Experience with microservices architecture
+- Knowledge of containerization (Docker/Kubernetes)
+- Familiarity with AI/ML technologies
+- Open source contributions
+
+Responsibilities:
+- Design and implement scalable software solutions
+- Lead technical projects and mentor junior developers
+- Collaborate with cross-functional teams
+- Participate in code reviews and architecture discussions
+- Maintain and improve existing systems
+
+Education:
+- Bachelor's degree in Computer Science or related field
+- Master's degree preferred
+
+Location: Remote (US/Europe timezone) 

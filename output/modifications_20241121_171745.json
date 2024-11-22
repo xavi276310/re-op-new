@@ -1,0 +1,14 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors",
+    "Customer Service": "Establish positive interactions with guests, respond promptly to their needs, and ensure their satisfaction and a pleasant experience"
+  },
+  "content_to_remove": [
+    "sew",
+    "I used to be a tailor employee."
+  ],
+  "content_to_modify": {
+    "cleaning kitchen ingredients, washing dishes": "在厨房环境中负责清洁和准备食材，确保卫生和安全标准的符合。",
+    "read a book": "对客户服务和餐饮业的相关书籍进行阅读，以提升自己的服务意识和行业理解。"
+  }
+}

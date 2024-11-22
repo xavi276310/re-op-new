@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Cashiering skills": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors",
+    "Teamwork and collaboration": "Teamwork and collaboration"
+  },
+  "content_to_remove": [
+    "I used to be a tailor employee.",
+    "2008-2013 Elementary school 067097"
+  ],
+  "content_to_modify": {
+    "cleaning cooking ingredients, washing dishes": "Responsible for maintaining a clean and organized kitchen environment by washing dishes and cleaning ingredients, ensuring all food preparations met health and safety standards."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors",
+    "Team Collaboration": "Team Collaboration"
+  },
+  "content_to_remove": [
+    "HOBBY: read a book"
+  ],
+  "content_to_modify": {
+    "I used to be a tailor employee. and I also have experience in restaurants in the field of cleaning cooking ingredients, washing dishes.": "I have worked in a restaurant where I was responsible for maintaining cleanliness and assisting in food preparation, directly contributing to a smooth and efficient kitchen environment."
+  }
+}

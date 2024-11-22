@@ -1,0 +1,12 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors"
+  },
+  "content_to_remove": [
+    "I used to be a tailor employee. and I also have experience in restaurants in the field of cleaning cooking ingredients, washing dishes"
+  ],
+  "content_to_modify": {
+    "• cleaning kitchen ingredients": "• Assisting in food preparation and maintaining a clean kitchen environment, ensuring that all ingredients met the standards for service.",
+    "• sew": "• Detail-oriented and skilled in craftsmanship, with experience in precise measurements and alterations."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Cashiering": "Responsible for processing customers' cash transactions and ensuring the payment process is completed accurately and without errors"
+  },
+  "content_to_remove": [
+    "sew",
+    "I used to be a tailor employee."
+  ],
+  "content_to_modify": {
+    "cleaning kitchen ingredients": "Experienced in preparing kitchen ingredients and maintaining a clean work environment to ensure efficient food service",
+    "washing dishes": "Skilled in maintaining cleanliness and organization in a busy kitchen environment"
+  }
+}

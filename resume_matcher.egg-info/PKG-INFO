@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: resume_matcher
+Version: 0.1
+Requires-Dist: streamlit
+Requires-Dist: openai<1.0.0
+Requires-Dist: PyPDF2
+Requires-Dist: Pillow
+Requires-Dist: pydantic
+Requires-Dist: termcolor
+Requires-Dist: reportlab
+Requires-Dist: markdown
+Requires-Dist: python-dotenv
+Requires-Dist: jinja2
+Requires-Dist: pdfkit
+Provides-Extra: ocr
+Requires-Dist: pytesseract; extra == "ocr"
+Requires-Dist: pdf2image; extra == "ocr"
