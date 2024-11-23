@@ -28,20 +28,38 @@ from src.utils.resume_generator import ResumeGenerator
 #
 #     return api_key, base_url
 
+# def get_api_credentials():
+#     """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
+#     try:
+#         # 从secrets.toml中获取api_key和base_url
+#         api_key = st.secrets["api_credentials"]["api_key"]
+#         base_url = st.secrets["api_credentials"]["base_url"]
+#     except KeyError:
+#         # 如果secrets中没有找到密钥，则回退到环境变量
+#         api_key = os.getenv("OPENAI_API_KEY")
+#         base_url = os.getenv("BASE_URL")
+#         if not api_key or not base_url:
+#             st.error("未找到API凭证。请设置API密钥。")
+#             st.stop()  # 如果没有凭证，停止执行
+#     return api_key, base_url
+
 def get_api_credentials():
-    """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
+    """获取API凭证"""
     try:
-        # 从secrets.toml中获取api_key和base_url
+        # 从 Streamlit Cloud secrets 获取凭证
         api_key = st.secrets["api_credentials"]["api_key"]
         base_url = st.secrets["api_credentials"]["base_url"]
-    except KeyError:
-        # 如果secrets中没有找到密钥，则回退到环境变量
-        api_key = os.getenv("OPENAI_API_KEY")
-        base_url = os.getenv("BASE_URL")
+
         if not api_key or not base_url:
-            st.error("未找到API凭证。请设置API密钥。")
-            st.stop()  # 如果没有凭证，停止执行
-    return api_key, base_url
+            st.error("API凭证未正确配置")
+            st.stop()
+
+        return api_key, base_url
+
+    except Exception as e:
+        st.error(f"获取API凭证时出错: {str(e)}")
+        st.error("请确保在Streamlit Cloud中正确配置了secrets")
+        st.stop()
 
 
 def main():
