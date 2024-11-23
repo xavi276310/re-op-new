@@ -111,7 +111,7 @@ referencing==0.35.1
 reportlab==4.2.5
 requests==2.31.0
 requests-oauthlib==2.0.0
--e git+https://git@github.com/xavi276310/re-op-new.git@ac926ae6659466c93dee851b37f1775da23ef21f#egg=resume_matcher
+git+https://git@github.com/xavi276310/re-op-new.git@ac926ae6659466c93dee851b37f1775da23ef21f#egg=resume_matcher
 rich==13.9.4
 rpds-py==0.21.0
 rsa==4.9
