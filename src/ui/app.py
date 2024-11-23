@@ -13,20 +13,36 @@ from src.core.resume_parser import ResumeParser
 from src.ui.components.resume_viewer import show_resume_preview
 from src.utils.resume_generator import ResumeGenerator
 
+# def get_api_credentials():
+#     """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
+#     try:
+#         api_key = st.secrets["api_key"]
+#         base_url = st.secrets["base_url"]
+#     except FileNotFoundError:
+#         api_key = os.getenv("OPENAI_API_KEY")
+#         base_url = os.getenv("OPENAI_BASE_URL")
+#
+#         if not api_key or not base_url:
+#             st.error("未找到API凭证。请确保设置了正确的环境变量或创建了secrets.toml文件。")
+#             st.stop()
+#
+#     return api_key, base_url
+
 def get_api_credentials():
     """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
     try:
-        api_key = st.secrets["api_key"]
-        base_url = st.secrets["base_url"]
-    except FileNotFoundError:
+        # 从secrets.toml中获取api_key和base_url
+        api_key = st.secrets["api_credentials"]["api_key"]
+        base_url = st.secrets["api_credentials"]["base_url"]
+    except KeyError:
+        # 如果secrets中没有找到密钥，则回退到环境变量
         api_key = os.getenv("OPENAI_API_KEY")
-        base_url = os.getenv("OPENAI_BASE_URL")
-        
+        base_url = os.getenv("BASE_URL")
         if not api_key or not base_url:
-            st.error("未找到API凭证。请确保设置了正确的环境变量或创建了secrets.toml文件。")
-            st.stop()
-    
+            st.error("未找到API凭证。请设置API密钥。")
+            st.stop()  # 如果没有凭证，停止执行
     return api_key, base_url
+
 
 def main():
     st.title("Resume Matcher & Editor")
