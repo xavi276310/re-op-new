@@ -13,54 +13,23 @@ from src.core.resume_parser import ResumeParser
 from src.ui.components.resume_viewer import show_resume_preview
 from src.utils.resume_generator import ResumeGenerator
 
-# def get_api_credentials():
-#     """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
-#     try:
-#         api_key = st.secrets["api_key"]
-#         base_url = st.secrets["base_url"]
-#     except FileNotFoundError:
-#         api_key = os.getenv("OPENAI_API_KEY")
-#         base_url = os.getenv("OPENAI_BASE_URL")
-#
-#         if not api_key or not base_url:
-#             st.error("未找到API凭证。请确保设置了正确的环境变量或创建了secrets.toml文件。")
-#             st.stop()
-#
-#     return api_key, base_url
-
-# def get_api_credentials():
-#     """获取API凭证，优先使用secrets，如果不存在则使用环境变量"""
-#     try:
-#         # 从secrets.toml中获取api_key和base_url
-#         api_key = st.secrets["api_credentials"]["api_key"]
-#         base_url = st.secrets["api_credentials"]["base_url"]
-#     except KeyError:
-#         # 如果secrets中没有找到密钥，则回退到环境变量
-#         api_key = os.getenv("OPENAI_API_KEY")
-#         base_url = os.getenv("BASE_URL")
-#         if not api_key or not base_url:
-#             st.error("未找到API凭证。请设置API密钥。")
-#             st.stop()  # 如果没有凭证，停止执行
-#     return api_key, base_url
-
 def get_api_credentials():
     """获取API凭证"""
     try:
         # 从 Streamlit Cloud secrets 获取凭证
         api_key = st.secrets["api_credentials"]["api_key"]
         base_url = st.secrets["api_credentials"]["base_url"]
-
+        
         if not api_key or not base_url:
             st.error("API凭证未正确配置")
             st.stop()
-
+            
         return api_key, base_url
-
+        
     except Exception as e:
         st.error(f"获取API凭证时出错: {str(e)}")
         st.error("请确保在Streamlit Cloud中正确配置了secrets")
         st.stop()
-
 
 def main():
     st.title("Resume Matcher & Editor")
@@ -93,10 +62,28 @@ def main():
     st.header("简历上传")
     uploaded_file = st.file_uploader("上传简历(PDF格式)", type="pdf", key="resume_uploader")
     
+    # 重置按钮
+    if st.button("重新分析", key="reset_button"):
+        # 完全重置所有 session_state 变量
+        st.session_state.analysis_complete = False
+        st.session_state.analysis_results = None
+        st.session_state.resume_text = None
+        st.session_state.resume_images = None
+        st.session_state.job_description = ""  # 重置岗位描述
+        st.session_state.modifications = {
+            'skills_to_add': {},
+            'content_to_remove': set(),
+            'content_to_modify': {}
+        }
+        # 清除文件上传器的状态
+        if 'resume_uploader' in st.session_state:
+            del st.session_state.resume_uploader
+        st.experimental_rerun()
+
     # 开始分析按钮
     if uploaded_file and job_description and st.button("开始分析"):
         with st.spinner('正在分析简历...'):
-            # 保存岗位描述
+            # 每次分析前都更新岗位描述
             st.session_state.job_description = job_description
             
             # 初始化AI客户端
@@ -112,7 +99,7 @@ def main():
             st.session_state.analysis_results = analysis
             st.session_state.analysis_complete = True
             
-            # 初始化修改状态
+            # 重置修改状态
             st.session_state.modifications = {
                 'skills_to_add': {},
                 'content_to_remove': set(),
@@ -238,6 +225,7 @@ def main():
             st.session_state.analysis_results = None
             st.session_state.resume_text = None
             st.session_state.resume_images = None
+            st.session_state.job_description = ""
             st.session_state.modifications = {
                 'skills_to_add': {},
                 'content_to_remove': set(),
