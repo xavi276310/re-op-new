@@ -53,7 +53,7 @@ def main():
     st.header("岗位描述")
     job_description = st.text_area(
         "请输入岗位描述",
-        value=st.session_state.job_description,
+        value="",  # 不使用session_state中的值
         height=200,
         help="请输入完整的岗位描述，包括职位要求、技能要求等"
     )
@@ -61,6 +61,25 @@ def main():
     # 文件上传
     st.header("简历上传")
     uploaded_file = st.file_uploader("上传简历(PDF格式)", type="pdf", key="resume_uploader")
+    
+    # 当文件上传器的值改变时，清除之前的分析结果
+    if uploaded_file is not None and 'last_uploaded_file' in st.session_state:
+        if uploaded_file.name != st.session_state.last_uploaded_file:
+            st.session_state.analysis_complete = False
+            st.session_state.analysis_results = None
+            st.session_state.resume_text = None
+            st.session_state.resume_images = None
+            st.session_state.job_description = ""
+            if 'modifications' in st.session_state:
+                st.session_state.modifications = {
+                    'skills_to_add': {},
+                    'content_to_remove': set(),
+                    'content_to_modify': {}
+                }
+    
+    # 记录当前上传的文件名
+    if uploaded_file is not None:
+        st.session_state.last_uploaded_file = uploaded_file.name
     
     # 开始分析按钮
     if uploaded_file and job_description and st.button("开始分析"):
