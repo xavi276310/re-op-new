@@ -62,24 +62,6 @@ def main():
     st.header("简历上传")
     uploaded_file = st.file_uploader("上传简历(PDF格式)", type="pdf", key="resume_uploader")
     
-    # 重置按钮
-    if st.button("重新分析", key="reset_button"):
-        # 完全重置所有 session_state 变量
-        st.session_state.analysis_complete = False
-        st.session_state.analysis_results = None
-        st.session_state.resume_text = None
-        st.session_state.resume_images = None
-        st.session_state.job_description = ""  # 重置岗位描述
-        st.session_state.modifications = {
-            'skills_to_add': {},
-            'content_to_remove': set(),
-            'content_to_modify': {}
-        }
-        # 清除文件上传器的状态
-        if 'resume_uploader' in st.session_state:
-            del st.session_state.resume_uploader
-        st.experimental_rerun()
-
     # 开始分析按钮
     if uploaded_file and job_description and st.button("开始分析"):
         with st.spinner('正在分析简历...'):
@@ -106,8 +88,26 @@ def main():
                 'content_to_modify': {}
             }
     
-    # 如果分析完成，显示结果
+    # 如果分析完成，显示结果和重新分析按钮
     if st.session_state.analysis_complete:
+        # 显示重新分析按钮
+        if st.button("重新分析", key="reset_button"):
+            # 完全重置所有 session_state 变量
+            st.session_state.analysis_complete = False
+            st.session_state.analysis_results = None
+            st.session_state.resume_text = None
+            st.session_state.resume_images = None
+            st.session_state.job_description = ""  # 重置岗位描述
+            st.session_state.modifications = {
+                'skills_to_add': {},
+                'content_to_remove': set(),
+                'content_to_modify': {}
+            }
+            # 清除文件上传器的状态
+            if 'resume_uploader' in st.session_state:
+                del st.session_state.resume_uploader
+            st.experimental_rerun()
+        
         # 显示简历预览
         show_resume_preview(st.session_state.resume_text, st.session_state.resume_images)
         
@@ -181,7 +181,7 @@ def main():
                     'content_to_modify': st.session_state.modifications['content_to_modify']
                 }
                 
-                # 获取原始PDF数据
+                # 获取原PDF数据
                 if uploaded_file is not None:
                     # 使用 getbuffer() 而不是 getvalue()
                     pdf_bytes = uploaded_file.getbuffer()
@@ -218,20 +218,6 @@ def main():
             except Exception as e:
                 st.error(f"保存修改时出错: {str(e)}")
                 st.error("请确保文件仍然可用，可能需要重新上传文件。")
-        
-        # 重置按钮
-        if st.button("重新分析", key="reset_button"):
-            st.session_state.analysis_complete = False
-            st.session_state.analysis_results = None
-            st.session_state.resume_text = None
-            st.session_state.resume_images = None
-            st.session_state.job_description = ""
-            st.session_state.modifications = {
-                'skills_to_add': {},
-                'content_to_remove': set(),
-                'content_to_modify': {}
-            }
-            st.experimental_rerun()
 
 if __name__ == "__main__":
     main() 
