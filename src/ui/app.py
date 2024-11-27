@@ -75,7 +75,7 @@ def main():
                     'skills_to_add': {},
                     'content_to_remove': set(),
                     'content_to_modify': {}
-                }
+                }  
     
     # 记录当前上传的文件名
     if uploaded_file is not None:
@@ -92,20 +92,51 @@ def main():
             
             # 解析简历
             resume_text, resume_images = ResumeParser.extract_text_and_image(uploaded_file)
-            st.session_state.resume_text = resume_text
-            st.session_state.resume_images = resume_images
             
-            # AI分析
-            analysis = json.loads(ai_client.analyze_resume(resume_text, job_description))
-            st.session_state.analysis_results = analysis
-            st.session_state.analysis_complete = True
-            
-            # 重置修改状态
-            st.session_state.modifications = {
-                'skills_to_add': {},
-                'content_to_remove': set(),
-                'content_to_modify': {}
-            }
+            # 结构化处理简历内容
+            structured_resume = ai_client.structure_resume(resume_text)
+            if structured_resume:
+                st.session_state.resume_text = resume_text
+                st.session_state.resume_images = resume_images
+                st.session_state.structured_resume = structured_resume
+                
+                # 显示结构化的简历内容
+                st.subheader("简历内容")
+                
+                # 显示技能
+                st.write("**技能**")
+                for skill_group in structured_resume['skills']:
+                    st.write(f"*{skill_group['category']}*")
+                    for skill in skill_group['items']:
+                        st.write(f"- {skill}")
+                
+                # 显示工作经验
+                st.write("**工作经验**")
+                for exp in structured_resume['experience']:
+                    st.write(f"**{exp['title']} @ {exp['company']}**")
+                    st.write(f"*{exp['duration']}*")
+                    for resp in exp['responsibilities']:
+                        st.write(f"- {resp}")
+                
+                # 显示其他信息
+                st.write("**其他信息**")
+                other_info = structured_resume['other_info']
+                if 'education' in other_info:
+                    st.write("*教育背景*")
+                    for edu in other_info['education']:
+                        st.write(f"- {edu['degree']} @ {edu['school']} ({edu['duration']})")
+                
+                # AI分析
+                analysis = json.loads(ai_client.analyze_resume(json.dumps(structured_resume), job_description))
+                st.session_state.analysis_results = analysis
+                st.session_state.analysis_complete = True
+                
+                # 重置修改状态
+                st.session_state.modifications = {
+                    'skills_to_add': {},
+                    'content_to_remove': set(),
+                    'content_to_modify': {}
+                }
     
     # 如果分析完成，显示结果和重新分析按钮
     if st.session_state.analysis_complete:

@@ -228,3 +228,51 @@ Salary Range: {job_desc['salary_range']}
                 "content_to_remove": [],
                 "content_to_modify": []
             })
+    
+    def structure_resume(self, resume_text):
+        """将简历内容结构化处理"""
+        prompt = f"""
+        Please analyze and structure the following resume content into clear sections.
+        
+        Resume Content:
+        {resume_text}
+        
+        Please return a JSON object with the following structure:
+        {{
+            "skills": [
+                {{
+                    "category": "Technical Skills/Soft Skills/Language Skills",
+                    "items": ["skill 1", "skill 2", ...]
+                }}
+            ],
+            "experience": [
+                {{
+                    "title": "job title",
+                    "company": "company name",
+                    "duration": "time period",
+                    "responsibilities": ["responsibility 1", "responsibility 2", ...]
+                }}
+            ],
+            "other_info": {{
+                "education": [
+                    {{
+                        "degree": "degree name",
+                        "school": "school name",
+                        "duration": "time period"
+                    }}
+                ],
+                "personal_info": {{
+                    "name": "candidate name",
+                    "contact": ["contact info 1", "contact info 2", ...]
+                }},
+                "additional_info": ["other relevant information"]
+            }}
+        }}
+        """
+        
+        try:
+            response = self.talk_to_ai(prompt, max_tokens=2000)
+            return json.loads(response)
+        except Exception as e:
+            print(colored(f"Error in resume structuring: {str(e)}", 'red'))
+            return None
