@@ -16,20 +16,19 @@ from src.utils.resume_generator import ResumeGenerator
 def get_api_credentials():
     """获取API凭证"""
     try:
-        # 从 Streamlit Cloud secrets 获取凭证
+        # 首先尝试从 Streamlit Cloud secrets 获取凭证
         api_key = st.secrets["api_credentials"]["api_key"]
         base_url = st.secrets["api_credentials"]["base_url"]
+    except Exception as e:
+        # 如果失败，尝试从环境变量获取
+        api_key = os.getenv("OPENAI_API_KEY")
+        base_url = os.getenv("OPENAI_BASE_URL")
         
         if not api_key or not base_url:
-            st.error("API凭证未正确配置")
+            st.error("API凭证未正确配置。请在Streamlit Cloud中配置secrets或设置环境变量。")
             st.stop()
-            
-        return api_key, base_url
-        
-    except Exception as e:
-        st.error(f"获取API凭证时出错: {str(e)}")
-        st.error("请确保在Streamlit Cloud中正确配置了secrets")
-        st.stop()
+    
+    return api_key, base_url
 
 def main():
     st.title("Resume Matcher & Editor")

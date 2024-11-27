@@ -241,38 +241,56 @@ Salary Range: {job_desc['salary_range']}
         {{
             "skills": [
                 {{
-                    "category": "Technical Skills/Soft Skills/Language Skills",
-                    "items": ["skill 1", "skill 2", ...]
+                    "category": "Skills",
+                    "items": ["skill 1", "skill 2"]
                 }}
             ],
             "experience": [
                 {{
-                    "title": "job title",
-                    "company": "company name",
-                    "duration": "time period",
-                    "responsibilities": ["responsibility 1", "responsibility 2", ...]
+                    "title": "Restaurant Staff",
+                    "company": "Local Restaurant",
+                    "duration": "March 2022 - July 2024",
+                    "responsibilities": [
+                        "Cleaned and prepared cooking ingredients",
+                        "Maintained kitchen cleanliness",
+                        "Assisted with food preparation"
+                    ]
                 }}
             ],
             "other_info": {{
                 "education": [
                     {{
-                        "degree": "degree name",
-                        "school": "school name",
-                        "duration": "time period"
+                        "degree": "Public vocational secondary schools",
+                        "school": "10 Medan",
+                        "duration": "2017-2019"
                     }}
                 ],
                 "personal_info": {{
-                    "name": "candidate name",
-                    "contact": ["contact info 1", "contact info 2", ...]
-                }},
-                "additional_info": ["other relevant information"]
+                    "name": "FITRIYANI",
+                    "contact": ["+60 16-341 0762", "fitriyani1005@gmail.com"]
+                }}
             }}
         }}
+
+        Important: Ensure all content is properly categorized and formatted.
         """
         
         try:
             response = self.talk_to_ai(prompt, max_tokens=2000)
-            return json.loads(response)
+            structured_data = json.loads(response)
+            print(colored(f"Structured resume data: {json.dumps(structured_data, indent=2)}", 'green'))
+            return structured_data
         except Exception as e:
             print(colored(f"Error in resume structuring: {str(e)}", 'red'))
-            return None
+            # 返回一个基本的结构化数据
+            return {
+                "skills": [{"category": "Skills", "items": []}],
+                "experience": [],
+                "other_info": {
+                    "education": [],
+                    "personal_info": {
+                        "name": "",
+                        "contact": []
+                    }
+                }
+            }
