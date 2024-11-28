@@ -182,28 +182,27 @@ def main():
                 if hasattr(st.session_state, 'structured_resume'):
                     structured_resume = st.session_state.structured_resume
                     
-                    # 显示个人信息
-                    st.write("**个人信息:**")
-                    other_info = structured_resume.get('other_info', [])
-                    
-                    # 安全地获取和显示信息
-                    name = next((info.split(': ')[1] for info in other_info if info.startswith('Name:')), 'N/A')
-                    contact = next((info.split(': ')[1] for info in other_info if info.startswith('Contact:')), 'N/A')
+                    # 处理个人信息
+                    personal_info = structured_resume.get('contact_info', {})
+                    name = personal_info.get('name', 'N/A')
+                    contact = personal_info.get('phone', 'N/A')
+                    email = personal_info.get('email', 'N/A')
                     
                     st.write(f"姓名: {name}")
                     st.write(f"联系方式: {contact}")
+                    st.write(f"电子邮件: {email}")
                     
                     # 显示教育背景
                     st.write("**教育背景:**")
-                    education_entries = [info for info in other_info if info.startswith('Education:')]
+                    education_entries = structured_resume.get('education', [])
                     for edu in education_entries:
-                        st.write(edu)
+                        st.write(f"{edu['degree']} - {edu['institution']} ({edu['year']})")
                     
                     # 显示证书和培训
                     st.write("**证书和培训:**")
-                    cert_entries = [info for info in other_info if info.startswith(('Certifications:', 'Training:'))]
+                    cert_entries = structured_resume.get('training_and_seminars_attended', [])
                     for cert in cert_entries:
-                        st.write(cert)
+                        st.write(f"{cert['title']} - {cert['provider']} ({cert['date']})")
                 else:
                     st.write("简历数据未加载")
             
@@ -262,7 +261,7 @@ def main():
                     st.write("修改内容预览:")
                     st.json(display_modifications)
                     
-                    # 提供��载链接
+                    # 提供载链接
                     try:
                         with open(doc_path, 'r', encoding='utf-8') as f:
                             doc_content = f.read()

@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Linux": "Add Linux as a skill, highlighting any relevant experience or familiarity with Linux-based systems or distributions.\n\n\n",
+    "Azure": "Add Azure as a skill, especially if you have any hands-on experience or familiarity with the platform, or consider completing an introductory Azure course."
+  },
+  "content_to_remove": [
+    "Knowledgeable in Open Source System"
+  ],
+  "content_to_modify": {
+    "Education: Web Developer (Online Course) - Learn Computer Today, SY2021": "Education: Web Development (Online Course) - Learn Computer Today, SY2021 (Focus on relevant skills such as troubleshooting and basic system administration)",
+    "Education: Computer Engineering (Undergrad) - Mega Computer College, SY2014": "Education: Computer Engineering (Undergrad) - Mega Computer College, SY2014 (Specify any IT support-related coursework if applicable)"
+  }
+}

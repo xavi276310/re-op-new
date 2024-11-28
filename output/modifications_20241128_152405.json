@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Linux": "Add 'Linux' to the skills section to highlight familiarity with Linux-based systems.",
+    "AWS (Amazon Web Services)": "Add 'AWS' to the skills section if you have familiarity with it, or indicate any relevant training or experience."
+  },
+  "content_to_remove": [
+    "Destiny Class"
+  ],
+  "content_to_modify": {
+    "Education: Web Developer (Online Course), institution: Learn Computer Today, year: SY2021": "Education: Web Developer (Online Course), institution: Learn Computer Today, year: SY2021 (Include relevant IT support skills from this course, if applicable, such as basic networking or troubleshooting).",
+    "Training and Seminars Attended: BOSH II - Basic Occupational Safety and Health Officer – Safety Officer 2, provider: OSHMS360 Corporation, date: November 8-12, 2021": "Training and Seminars Attended: BOSH II - Basic Occupational Safety and Health Officer, OSHMS360 Corporation, date: November 8-12, 2021 (This training is unrelated to the IT helpdesk role and can be removed or reworded to highlight safety knowledge if it's beneficial)."
+  }
+}
