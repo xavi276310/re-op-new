@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Linux": "Add 'Basic Linux administration and troubleshooting' to showcase the ability to work with Linux systems.",
+    "AWS (Amazon Web Services)": "Add 'Familiarity with AWS services and cloud infrastructure' to demonstrate a basic understanding of cloud platforms."
+  },
+  "content_to_remove": [
+    "Computer hardware & software troubleshooting"
+  ],
+  "content_to_modify": {
+    "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)": "Education: Computer Engineering (Undergraduate, incomplete) at Mega Computer College (2014)",
+    "Certifications: Computer System Servicing NCII (2017)": "Certifications: Computer System Servicing NCII (2017), Web Developer - Learn Computer Today (2021)"
+  }
+}

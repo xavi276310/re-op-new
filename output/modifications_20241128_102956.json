@@ -1,0 +1,14 @@
+{
+  "skills_to_add": {
+    "Linux": "在简历中的Skills部分新增：\"Linux（基础操作、系统维护等）\"",
+    "Azure": "Azure（基本配置与操作）"
+  },
+  "content_to_remove": [
+    "Network Database Monitoring (Freenas, Centos Database System)",
+    "Computer hardware & software troubleshooting"
+  ],
+  "content_to_modify": {
+    "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)": "Education: Computer Engineering (Undergrad) at Mega Computer College (2014), focusing on IT systems and network administration",
+    "Certifications: Computer System Servicing NCII (2017)": "Certifications: Computer System Servicing NCII (2017), with a focus on IT support and system maintenance"
+  }
+}

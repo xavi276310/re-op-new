@@ -1,0 +1,13 @@
+{
+  "skills_to_add": {
+    "Linux": "Consider taking a free online course or certification in Linux basics to gain theoretical knowledge and mention practice in your resume.",
+    "SQL": "Learn the basics of SQL and mention any practical applications or projects where SQL was used."
+  },
+  "content_to_remove": [
+    "Safety Officer at Currey International Inc (January 2022 - December 2023)"
+  ],
+  "content_to_modify": {
+    "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023)": "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023) - Provided technical support for hardware and software issues, maintained IT infrastructure, and assisted in troubleshooting network problems.",
+    "Knowledgeable in Open Source System": "Knowledgeable in Open Source Systems, including Linux distributions."
+  }
+}

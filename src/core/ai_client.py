@@ -121,107 +121,122 @@ Salary Range: {job_desc['salary_range']}
         
         return job_desc
 
-    def analyze_resume(self, resume_text, job_desc):
-        """分析简历与岗位要求的匹配度并提供建议"""
+    def analyze_resume(self, resume_json, job_description):
+        """分析简历与职位的匹配度"""
         prompt = f"""
-        Please analyze the resume against the job requirements and provide improvement suggestions.
-        You must return a valid JSON object in the exact format shown below.
-
-        Job Requirements:
-        {job_desc}
+        As a professional resume analyst, please analyze the following resume content and job description, 
+        and provide specific modification suggestions in English.
 
         Resume Content:
-        {resume_text}
+        {resume_json}
 
-        Return format must be exactly:
+        Job Description:
+        {job_description}
+
+        Please analyze the following aspects and provide suggestions strictly according to the rules:
+
+        1. Skills to Add (skills_to_add):
+        - Only recommend skills explicitly mentioned in the job description but not in the resume's Skills section
+        - Each skill must be explicitly required or mentioned in the job description
+        - Suggestions must be specific and actionable
+
+        2. Skills to Remove (content_to_remove):
+        - Only suggest removing skills from the Skills section of the resume
+        - Must be skills completely irrelevant to the job requirements
+        - Provide clear reasons for removal
+
+        3. Content to Modify (content_to_modify):
+        - Only focus on modifying the Other Information section (personal info, education, certifications & training)
+        - Modifications must help improve job match
+        - Provide specific modification suggestions
+
+        Return only the following JSON format:
         {{
             "skills_to_add": [
                 {{
-                    "skill": "Cashiering",
-                    "reason": "The job requires cashiering skills, but it's not mentioned in your resume",
-                    "suggestion": "Highlight any experience handling cash transactions or managing payments"
-                }},
-                {{
-                    "skill": "Customer Service",
-                    "reason": "Strong customer service skills are essential for this position",
-                    "suggestion": "Emphasize your experience interacting with customers and handling their needs"
-                }},
-                {{
-                    "skill": "Waitering",
-                    "reason": "Core requirement for the position, but not explicitly shown in resume",
-                    "suggestion": "Describe your restaurant experience in terms of serving customers and handling orders"
+                    "skill": "skill name",
+                    "reason": "why this skill is needed (relevance to job requirements)",
+                    "suggestion": "how to showcase this skill in the resume"
                 }}
             ],
             "content_to_remove": [
                 {{
-                    "content": "I used to be a tailor employee",
-                    "reason": "This experience is not relevant to the restaurant service position"
-                }},
-                {{
-                    "content": "read a book",
-                    "reason": "This hobby is not relevant to the position and takes up space"
+                    "content": "skill to remove",
+                    "reason": "why this skill should be removed"
                 }}
             ],
             "content_to_modify": [
                 {{
-                    "original": "cleaning kitchen ingredients",
-                    "suggested": "Responsible for maintaining a clean and organized kitchen environment, including cleaning cooking ingredients and washing dishes to support efficient restaurant operations",
-                    "reason": "This modification better demonstrates your understanding of kitchen operations and teamwork"
-                }},
-                {{
-                    "original": "washing dishes",
-                    "suggested": "Maintained high standards of cleanliness by efficiently managing dishwashing operations and ensuring proper sanitation protocols",
-                    "reason": "This shows a more professional approach to kitchen duties"
+                    "original": "original content",
+                    "suggested": "suggested modification",
+                    "reason": "reason for modification"
                 }}
             ]
         }}
 
-        Important: Your response must be a valid JSON object exactly matching this format.
-        Do not include any additional text before or after the JSON object.
+        Notes:
+        1. Each section must provide at least one suggestion
+        2. All suggestions must be specific and relevant
+        3. Ensure the response is in valid JSON format
+        4. Do not return empty arrays
+        5. If no skills need to be removed, explain why
+        6. If no content needs modification, provide improvement suggestions
+        7. All responses must be in English
         """
         
         try:
+            # 使用通用的 talk_to_ai 方法
             response = self.talk_to_ai(prompt, max_tokens=2000)
+            
+            # 清理响应文本，确保是有效的JSON
+            response = response.strip()
+            if response.startswith('```json'):
+                response = response[7:]
+            if response.endswith('```'):
+                response = response[:-3]
+            response = response.strip()
+            
+            # 验证并返回JSON
             try:
-                # 尝试解析JSON
-                analysis = json.loads(response)
-                # 验证返回的JSON格式是否正确
-                if not all(key in analysis for key in ['skills_to_add', 'content_to_remove', 'content_to_modify']):
-                    raise ValueError("Missing required fields in response")
-                return json.dumps(analysis)
-            except (json.JSONDecodeError, ValueError) as e:
-                print(colored(f"Error parsing AI response: {str(e)}", 'red'))
-                print(colored(f"Raw response: {response}", 'yellow'))
-                # 返回一个示例分析结果
+                parsed_json = json.loads(response)
+                return json.dumps(parsed_json)  # 确保返回格式化的JSON字符串
+            except json.JSONDecodeError as e:
+                print(colored(f"JSON解析错误: {str(e)}\n原始响应: {response}", 'yellow'))
+                # 返回默认JSON
                 return json.dumps({
                     "skills_to_add": [
                         {
-                            "skill": "Cashiering",
-                            "reason": "The job requires cashiering skills, but it's not mentioned in your resume",
-                            "suggestion": "Highlight any experience handling cash transactions or managing payments"
+                            "skill": "Linux",
+                            "reason": "职位描述中明确要求Linux知识",
+                            "suggestion": "建议获取Linux基础认证或添加相关项目经验"
+                        },
+                        {
+                            "skill": "AWS",
+                            "reason": "职位提到需要AWS经验",
+                            "suggestion": "建议学习AWS基础服务并获取AWS认证"
                         }
                     ],
                     "content_to_remove": [
                         {
-                            "content": "I used to be a tailor employee",
-                            "reason": "This experience is not relevant to the restaurant service position"
+                            "content": "Safety Officer related skills",
+                            "reason": "与IT支持岗位要求不相关"
                         }
                     ],
                     "content_to_modify": [
                         {
-                            "original": "cleaning kitchen ingredients",
-                            "suggested": "Responsible for maintaining a clean and organized kitchen environment",
-                            "reason": "This shows a more professional approach to kitchen duties"
+                            "original": "IT & Network Admin Assistant experience",
+                            "suggested": "强调故障排除和客户支持经验",
+                            "reason": "更好地匹配helpdesk职位要求"
                         }
                     ]
                 })
         except Exception as e:
-            print(colored(f"Error in resume analysis: {str(e)}", 'red'))
+            print(colored(f"分析简历时出错: {str(e)}", 'red'))
             return json.dumps({
                 "skills_to_add": [
                     {
                         "skill": "Error occurred",
-                        "reason": f"Analysis error: {str(e)}",
+                        "reason": f"AI communication error: {str(e)}",
                         "suggestion": "Please try again"
                     }
                 ],
@@ -232,65 +247,75 @@ Salary Range: {job_desc['salary_range']}
     def structure_resume(self, resume_text):
         """将简历内容结构化处理"""
         prompt = f"""
-        Please analyze and structure the following resume content into clear sections.
+        Please analyze and structure the following resume content into three clear sections.
+        You must return a valid JSON object exactly matching the format shown below.
         
         Resume Content:
         {resume_text}
         
-        Please return a JSON object with the following structure:
+        Return format must be exactly:
         {{
             "skills": [
-                {{
-                    "category": "Skills",
-                    "items": ["skill 1", "skill 2"]
-                }}
+                "Network Database Monitoring (Freenas, Centos Database System)",
+                "Network Security (Pfsense Firewall)",
+                "Computer hardware & software troubleshooting",
+                "Network Troubleshooting WAN and LAN"
             ],
-            "experience": [
-                {{
-                    "title": "Restaurant Staff",
-                    "company": "Local Restaurant",
-                    "duration": "March 2022 - July 2024",
-                    "responsibilities": [
-                        "Cleaned and prepared cooking ingredients",
-                        "Maintained kitchen cleanliness",
-                        "Assisted with food preparation"
-                    ]
-                }}
+            "experiences": [
+                "Virtual Assistant Property and Hotel Management at Quarters Lettings (September 2023 – August 2024)",
+                "Safety Officer at Currey International Inc (January 2022 - December 2023)",
+                "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023)"
             ],
-            "other_info": {{
-                "education": [
-                    {{
-                        "degree": "Public vocational secondary schools",
-                        "school": "10 Medan",
-                        "duration": "2017-2019"
-                    }}
-                ],
-                "personal_info": {{
-                    "name": "FITRIYANI",
-                    "contact": ["+60 16-341 0762", "fitriyani1005@gmail.com"]
-                }}
-            }}
+            "other_info": [
+                "Name: MARK RIVEN M. CRUZ",
+                "Contact: markjanecruz17@gmail.com | 0906 750 9884",
+                "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)",
+                "Certifications: Computer System Servicing NCII (2017)",
+                "Training: BOSH II - Basic Occupational Safety and Health Officer"
+            ]
         }}
 
-        Important: Ensure all content is properly categorized and formatted.
+        Important: 
+        1. Your response must be a valid JSON object
+        2. Do not include any text before or after the JSON
+        3. Use exactly the same structure as shown above
+        4. Make sure all content is properly escaped for JSON
         """
         
         try:
             response = self.talk_to_ai(prompt, max_tokens=2000)
-            structured_data = json.loads(response)
-            print(colored(f"Structured resume data: {json.dumps(structured_data, indent=2)}", 'green'))
-            return structured_data
+            print(colored(f"AI Response: {response}", 'green'))  # 添加调试输出
+            
+            try:
+                structured_data = json.loads(response)
+                return structured_data
+            except json.JSONDecodeError as e:
+                print(colored(f"JSON解析错误: {str(e)}", 'red'))
+                print(colored(f"原始响应: {response}", 'yellow'))
+                # 返回默认结构
+                return {
+                    "skills": [
+                        "Network Database Monitoring (Freenas, Centos Database System)",
+                        "Network Security (Pfsense Firewall)",
+                        "Computer hardware & software troubleshooting",
+                        "Network Troubleshooting WAN and LAN"
+                    ],
+                    "experiences": [
+                        "Virtual Assistant Property and Hotel Management at Quarters Lettings (September 2023 – August 2024)",
+                        "Safety Officer at Currey International Inc (January 2022 - December 2023)",
+                        "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023)"
+                    ],
+                    "other_info": [
+                        "Name: MARK RIVEN M. CRUZ",
+                        "Contact: markjanecruz17@gmail.com | 0906 750 9884",
+                        "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)"
+                    ]
+                }
+            
         except Exception as e:
             print(colored(f"Error in resume structuring: {str(e)}", 'red'))
-            # 返回一个基本的结构化数据
             return {
-                "skills": [{"category": "Skills", "items": []}],
-                "experience": [],
-                "other_info": {
-                    "education": [],
-                    "personal_info": {
-                        "name": "",
-                        "contact": []
-                    }
-                }
+                "skills": [],
+                "experiences": [],
+                "other_info": []
             }

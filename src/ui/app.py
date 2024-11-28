@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import streamlit as st
 import json
+import datetime
 
 # 获取项目根目录
 ROOT_DIR = Path(__file__).parent.parent.parent
@@ -99,32 +100,6 @@ def main():
                 st.session_state.resume_images = resume_images
                 st.session_state.structured_resume = structured_resume
                 
-                # 显示结构化的简历内容
-                st.subheader("简历内容")
-                
-                # 显示技能
-                st.write("**技能**")
-                for skill_group in structured_resume['skills']:
-                    st.write(f"*{skill_group['category']}*")
-                    for skill in skill_group['items']:
-                        st.write(f"- {skill}")
-                
-                # 显示工作经验
-                st.write("**工作经验**")
-                for exp in structured_resume['experience']:
-                    st.write(f"**{exp['title']} @ {exp['company']}**")
-                    st.write(f"*{exp['duration']}*")
-                    for resp in exp['responsibilities']:
-                        st.write(f"- {resp}")
-                
-                # 显示其他信息
-                st.write("**其他信息**")
-                other_info = structured_resume['other_info']
-                if 'education' in other_info:
-                    st.write("*教育背景*")
-                    for edu in other_info['education']:
-                        st.write(f"- {edu['degree']} @ {edu['school']} ({edu['duration']})")
-                
                 # AI分析
                 analysis = json.loads(ai_client.analyze_resume(json.dumps(structured_resume), job_description))
                 st.session_state.analysis_results = analysis
@@ -182,43 +157,83 @@ def main():
                     if experience:
                         st.session_state.modifications['skills_to_add'][skill['skill']] = experience
 
-        st.header("2. 建议删除的内容")
+        st.header("2. 建议删除的技能")
         for content in analysis["content_to_remove"]:
-            with st.expander(f"🔍 需要考虑删除的内容", expanded=True):
-                st.write("**原文内容：**")
+            with st.expander(f"🔍 需要考虑删除的技能", expanded=True):
+                st.write("**原有技能：**")
                 st.write(content['content'])
                 st.write("**建议删除原因：**")
                 st.write(content['reason'])
                 
                 content_key = content['content']
-                if st.checkbox("删除这部分内容", key=f"remove_{content_key}"):
+                if st.checkbox("删除这个技能", key=f"remove_{content_key}"):
                     st.session_state.modifications['content_to_remove'].add(content['content'])
 
         st.header("3. 建议修改的内容")
-        for modify in analysis["content_to_modify"]:
-            with st.expander(f"📝 建议优化的内容", expanded=True):
-                st.write("**原始内容：**")
-                st.write(modify['original'])
-                st.write("**建议修改为：**")
-                st.write(modify['suggested'])
-                st.write("**修改原因：**")
-                st.write(modify['reason'])
-                if 'keywords' in modify:
-                    st.write("**关键词：**")
-                    st.write(modify['keywords'])
+        if analysis["content_to_modify"]:
+            # 创建两列布局
+            col1, col2 = st.columns(2)
+            
+            # 左侧列：原始简历内容
+            with col1:
+                st.subheader("原始简历内容")
+                st.markdown("---")
                 
-                modify_key = modify['original']
-                if st.checkbox("修改这部分内容", key=f"modify_checkbox_{modify_key}"):
-                    modified_text = st.text_area(
-                        "自定义修改:",
-                        value=st.session_state.modifications['content_to_modify'].get(
-                            modify['original'], modify['suggested']
-                        ),
-                        key=f"modify_text_{modify_key}",
-                        help="你可以直接使用建议的修改，或者自己编写"
-                    )
-                    if modified_text:
-                        st.session_state.modifications['content_to_modify'][modify['original']] = modified_text
+                # 确保 structured_resume 存在且包含必要的数据
+                if hasattr(st.session_state, 'structured_resume'):
+                    structured_resume = st.session_state.structured_resume
+                    
+                    # 显示个人信息
+                    st.write("**个人信息:**")
+                    other_info = structured_resume.get('other_info', [])
+                    
+                    # 安全地获取和显示信息
+                    name = next((info.split(': ')[1] for info in other_info if info.startswith('Name:')), 'N/A')
+                    contact = next((info.split(': ')[1] for info in other_info if info.startswith('Contact:')), 'N/A')
+                    
+                    st.write(f"姓名: {name}")
+                    st.write(f"联系方式: {contact}")
+                    
+                    # 显示教育背景
+                    st.write("**教育背景:**")
+                    education_entries = [info for info in other_info if info.startswith('Education:')]
+                    for edu in education_entries:
+                        st.write(edu)
+                    
+                    # 显示证书和培训
+                    st.write("**证书和培训:**")
+                    cert_entries = [info for info in other_info if info.startswith(('Certifications:', 'Training:'))]
+                    for cert in cert_entries:
+                        st.write(cert)
+                else:
+                    st.write("简历数据未加载")
+            
+            # 右侧列：修改建议
+            with col2:
+                st.subheader("修改建议")
+                st.markdown("---")
+                
+                for modify in analysis["content_to_modify"]:
+                    with st.expander(f"📝 修改建议", expanded=True):
+                        st.write("**原始内容：**")
+                        st.write(modify['original'])
+                        st.write("**建议修改为：**")
+                        st.write(modify['suggested'])
+                        st.write("**修改原因：**")
+                        st.write(modify['reason'])
+                        
+                        modify_key = modify['original']
+                        if st.checkbox("采用这个修改", key=f"modify_checkbox_{modify_key}"):
+                            modified_text = st.text_area(
+                                "自定义修改:",
+                                value=st.session_state.modifications['content_to_modify'].get(
+                                    modify['original'], modify['suggested']
+                                ),
+                                key=f"modify_text_{modify_key}",
+                                help="你可以直接使用建议的修改，或者自己编写"
+                            )
+                            if modified_text:
+                                st.session_state.modifications['content_to_modify'][modify['original']] = modified_text
 
         # 保存按钮
         if st.button("保存修改", key="save_button"):
@@ -267,6 +282,50 @@ def main():
             except Exception as e:
                 st.error(f"保存修改时出错: {str(e)}")
                 st.error("请确保文件仍然可用，可能需要重新上传文件。")
+
+        # 在保存按钮之后添加导出功能
+        if st.button("导出修改建议", key="export_button"):
+            try:
+                # 准备导出数据，使用更清晰的结构
+                export_data = {
+                    'resume_analysis': {
+                        'original_resume': {
+                            'skills': st.session_state.structured_resume['skills'],
+                            'experiences': st.session_state.structured_resume['experiences'],
+                            'other_info': st.session_state.structured_resume['other_info']
+                        },
+                        'job_description': st.session_state.job_description,
+                        'analysis_results': {
+                            'skills_to_add': st.session_state.analysis_results['skills_to_add'],
+                            'content_to_remove': st.session_state.analysis_results['content_to_remove'],
+                            'content_to_modify': st.session_state.analysis_results['content_to_modify']
+                        }
+                    },
+                    'user_modifications': {
+                        'skills_to_add': st.session_state.modifications['skills_to_add'],
+                        'content_to_remove': list(st.session_state.modifications['content_to_remove']),
+                        'content_to_modify': st.session_state.modifications['content_to_modify']
+                    },
+                    'metadata': {
+                        'timestamp': datetime.datetime.now().isoformat(),
+                        'version': '1.0'
+                    }
+                }
+                
+                # 转换为格式化的JSON字符串
+                json_str = json.dumps(export_data, indent=2, ensure_ascii=False)
+                
+                # 提供下载按钮
+                st.download_button(
+                    label="下载分析结果 (JSON)",
+                    data=json_str,
+                    file_name=f"resume_analysis_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    mime="application/json",
+                    help="下载完整的分析结果，包括原始简历、分析建议和修改记录"
+                )
+                
+            except Exception as e:
+                st.error(f"导出数据时出错: {str(e)}")
 
 if __name__ == "__main__":
     main() 

@@ -1,0 +1,14 @@
+{
+  "skills_to_add": {
+    "Linux": "Add 'Linux' to the skills section and describe any relevant experience with Linux-based systems or tools, even if limited.",
+    "Azure": "If you have any knowledge or training in Azure, it should be added to the skills section to show familiarity with cloud platforms."
+  },
+  "content_to_remove": [
+    "Network Troubleshooting WAN and LAN",
+    "Network Database Monitoring (Freenas, Centos Database System)"
+  ],
+  "content_to_modify": {
+    "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)": "Education: Bachelor’s Degree in Computer Engineering (Incomplete), Mega Computer College (2014)",
+    "Certifications: Computer System Servicing NCII (2017), Web Developer (Online Course, 2021)": "Certifications: Computer System Servicing NCII (2017), Web Developer (Online Course, 2021), Cloud Computing Fundamentals (Online Course, 2023) [if applicable]"
+  }
+}
