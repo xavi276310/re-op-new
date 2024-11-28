@@ -35,7 +35,19 @@ def show_resume_preview(resume_text, resume_images):
         st.write("**Experiences:**")
         if structured_resume.get("experiences"):
             for exp in structured_resume["experiences"]:
-                st.write(f"• {exp}")
+                # 处理字典或字符串格式的经验
+                if isinstance(exp, dict):
+                    # 构建格式化的经验描述
+                    exp_text = f"• {exp.get('position', '')} at {exp.get('company', '')}"
+                    if exp.get('duration'):
+                        exp_text += f" ({exp.get('duration')})"
+                    st.write(exp_text)
+                    # 如果有职责描述，显示为子项
+                    if exp.get('responsibilities'):
+                        for resp in exp['responsibilities']:
+                            st.write(f"  - {resp}")
+                else:
+                    st.write(f"• {exp}")
         else:
             st.write("No experiences listed")
         st.write("")
@@ -49,14 +61,24 @@ def show_resume_preview(resume_text, resume_images):
             certifications = []
             
             for info in structured_resume["other_info"]:
-                if "CONTACT" in info.upper() or "NAME" in info.upper():
-                    personal_info.append(info)
-                elif "EDUCATION" in info.upper() or "SCHOOL" in info.upper():
-                    education.append(info)
-                elif "CERTIFICATION" in info.upper() or "TRAINING" in info.upper():
-                    certifications.append(info)
-                else:
-                    personal_info.append(info)
+                # 处理字典格式的信息
+                if isinstance(info, dict):
+                    info_str = ""
+                    # 构建格式化的信息字符串
+                    for key, value in info.items():
+                        info_str += f"{key}: {value} "
+                    info = info_str.strip()
+                
+                # 现在 info 一定是字符串，可以安全地调用 upper()
+                if isinstance(info, str):
+                    if "CONTACT" in info.upper() or "NAME" in info.upper():
+                        personal_info.append(info)
+                    elif "EDUCATION" in info.upper() or "SCHOOL" in info.upper():
+                        education.append(info)
+                    elif "CERTIFICATION" in info.upper() or "TRAINING" in info.upper():
+                        certifications.append(info)
+                    else:
+                        personal_info.append(info)
             
             # 显示个人信息
             if personal_info:

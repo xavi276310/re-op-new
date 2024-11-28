@@ -1,0 +1,15 @@
+{
+  "skills_to_add": {
+    "Linux": "Add 'Linux' to the resume under the Skills section, highlighting any relevant experience or coursework if applicable.\n\n\n",
+    "Azure": "If the candidate has knowledge or exposure to Microsoft Azure, it should be included in the Skills section."
+  },
+  "content_to_remove": [
+    "Pfsense Firewall",
+    "Knowledgeable in Open Source System",
+    "Database Server (ex. Freenas)"
+  ],
+  "content_to_modify": {
+    "Education: Web Developer (Online Course) - Learn Computer Today, SY2021": "Education: Web Developer (Online Course) - Learn Computer Today, SY2021. Focus on relevant IT skills acquired such as basic system administration or troubleshooting.",
+    "Training and Seminars Attended: COSH II – Construction Safety and Health Officer – Safety Officer 2, OSHC Rue 2 (March 27-31, 2023)": "Training and Seminars Attended: COSH II – Construction Safety and Health Officer, OSHC Rue 2 (March 27-31, 2023) – Highlight relevant safety knowledge applicable to the IT workspace."
+  }
+}
