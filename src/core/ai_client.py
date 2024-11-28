@@ -1,6 +1,7 @@
 from termcolor import colored
 import importlib.metadata
 import json
+import logging
 
 class AIClient:
     def __init__(self, api_key, base_url):
@@ -231,7 +232,7 @@ Salary Range: {job_desc['salary_range']}
                     ]
                 })
         except Exception as e:
-            print(colored(f"分析简历时出错: {str(e)}", 'red'))
+            print(colored(f"分析���历时出错: {str(e)}", 'red'))
             return json.dumps({
                 "skills_to_add": [
                     {
@@ -245,10 +246,16 @@ Salary Range: {job_desc['salary_range']}
             })
     
     def structure_resume(self, resume_text):
+        logging.info(f"Received resume text: {resume_text[:200]}...")  # 记录前200个字符
+        structured_result = self._process_resume(resume_text)
+        logging.info(f"Structured result: {json.dumps(structured_result, indent=2)}")
+        return structured_result
+
+    def _process_resume(self, resume_text):
         """将简历内容结构化处理"""
         prompt = f"""
         Please analyze and structure the following resume content into three clear sections.
-        You must return a valid JSON object exactly matching the format shown below.
+        You must extract the actual information from the provided resume text, do not use any default values.
         
         Resume Content:
         {resume_text}
@@ -256,30 +263,22 @@ Salary Range: {job_desc['salary_range']}
         Return format must be exactly:
         {{
             "skills": [
-                "Network Database Monitoring (Freenas, Centos Database System)",
-                "Network Security (Pfsense Firewall)",
-                "Computer hardware & software troubleshooting",
-                "Network Troubleshooting WAN and LAN"
+                // List of actual skills found in the resume
             ],
             "experiences": [
-                "Virtual Assistant Property and Hotel Management at Quarters Lettings (September 2023 – August 2024)",
-                "Safety Officer at Currey International Inc (January 2022 - December 2023)",
-                "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023)"
+                // List of actual work experiences found in the resume
             ],
             "other_info": [
-                "Name: MARK RIVEN M. CRUZ",
-                "Contact: markjanecruz17@gmail.com | 0906 750 9884",
-                "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)",
-                "Certifications: Computer System Servicing NCII (2017)",
-                "Training: BOSH II - Basic Occupational Safety and Health Officer"
+                // List of other information like personal info, education, certifications
             ]
         }}
 
         Important: 
-        1. Your response must be a valid JSON object
-        2. Do not include any text before or after the JSON
-        3. Use exactly the same structure as shown above
+        1. Only include information that actually appears in the resume text
+        2. Your response must be a valid JSON object
+        3. Do not include any text before or after the JSON
         4. Make sure all content is properly escaped for JSON
+        5. Do not use any default or example values
         """
         
         try:
@@ -288,32 +287,22 @@ Salary Range: {job_desc['salary_range']}
             
             try:
                 structured_data = json.loads(response)
+                # 验证返回的数据不是默认值
+                if not structured_data["skills"] and not structured_data["experiences"] and not structured_data["other_info"]:
+                    logging.warning("AI returned empty structured data")
                 return structured_data
             except json.JSONDecodeError as e:
-                print(colored(f"JSON解析错误: {str(e)}", 'red'))
-                print(colored(f"原始响应: {response}", 'yellow'))
-                # 返回默认结构
+                logging.error(f"JSON解析错误: {str(e)}")
+                logging.error(f"原始响应: {response}")
+                # 返回空结构而不是默认值
                 return {
-                    "skills": [
-                        "Network Database Monitoring (Freenas, Centos Database System)",
-                        "Network Security (Pfsense Firewall)",
-                        "Computer hardware & software troubleshooting",
-                        "Network Troubleshooting WAN and LAN"
-                    ],
-                    "experiences": [
-                        "Virtual Assistant Property and Hotel Management at Quarters Lettings (September 2023 – August 2024)",
-                        "Safety Officer at Currey International Inc (January 2022 - December 2023)",
-                        "IT & Network Admin Assistant at Currey International Inc (July 2017 - December 2023)"
-                    ],
-                    "other_info": [
-                        "Name: MARK RIVEN M. CRUZ",
-                        "Contact: markjanecruz17@gmail.com | 0906 750 9884",
-                        "Education: Computer Engineering (Undergrad) at Mega Computer College (2014)"
-                    ]
+                    "skills": [],
+                    "experiences": [],
+                    "other_info": []
                 }
             
         except Exception as e:
-            print(colored(f"Error in resume structuring: {str(e)}", 'red'))
+            logging.error(f"Error in resume structuring: {str(e)}")
             return {
                 "skills": [],
                 "experiences": [],

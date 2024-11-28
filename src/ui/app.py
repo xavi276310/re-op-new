@@ -84,9 +84,6 @@ def main():
     # 开始分析按钮
     if uploaded_file and job_description and st.button("开始分析"):
         with st.spinner('正在分析简历...'):
-            # 每次分析前都更新岗位描述
-            st.session_state.job_description = job_description
-            
             # 初始化AI客户端
             ai_client = AIClient(api_key, base_url)
             
@@ -95,6 +92,7 @@ def main():
             
             # 结构化处理简历内容
             structured_resume = ai_client.structure_resume(resume_text)
+            
             if structured_resume:
                 st.session_state.resume_text = resume_text
                 st.session_state.resume_images = resume_images
@@ -102,6 +100,7 @@ def main():
                 
                 # AI分析
                 analysis = json.loads(ai_client.analyze_resume(json.dumps(structured_resume), job_description))
+                
                 st.session_state.analysis_results = analysis
                 st.session_state.analysis_complete = True
                 
@@ -215,7 +214,7 @@ def main():
                 
                 for modify in analysis["content_to_modify"]:
                     with st.expander(f"📝 修改建议", expanded=True):
-                        st.write("**原始内容：**")
+                        st.write("**原始容：**")
                         st.write(modify['original'])
                         st.write("**建议修改为：**")
                         st.write(modify['suggested'])
@@ -263,7 +262,7 @@ def main():
                     st.write("修改内容预览:")
                     st.json(display_modifications)
                     
-                    # 提供下载链接
+                    # 提供��载链接
                     try:
                         with open(doc_path, 'r', encoding='utf-8') as f:
                             doc_content = f.read()

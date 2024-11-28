@@ -5,6 +5,8 @@ from utils.file_handler import get_pdf_files, read_job_description
 from output.report_generator import generate_final_report
 from core.ai_client import AIClient
 
+# 1
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Resume Matcher")
     parser.add_argument("--sans-serif", action="store_true", help="Use sans-serif font preset")
